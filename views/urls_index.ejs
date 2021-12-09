@@ -10,9 +10,13 @@
 </head>
 <body>
   <%- include('partials/_header') %>
-  
+
+  <% if(user) {%>
+    <td><%= user.email%></td>
+    <% } %>
   <main style="margin: 1em;">
     <h3>My URLs</h3>
+
     <table class="table">
       <thead>
         <tr>
@@ -28,6 +32,7 @@
           <tr>
             <td><%= url %></td>
             <td><%= urls[url] %></td>
+           
             <td>
             <form method="POST" active="/urls/<%= url %>/update">
              
@@ -39,7 +44,7 @@
               <button name= "delete" class="btn btn-outline-danger">Delete</button>
               </form>
               </td>
-            </td>
+              
           </tr>
         <% } %>
        
