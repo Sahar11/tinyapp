@@ -7,29 +7,25 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-       
         <a class="nav-item nav-link" href="/urls">My URLs</a>
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
-        <% if(!user){ %>
-        <form method="POST" action="/login">
-          <label for="email">Email</label>
-          <input type="email" name="email"> 
-          <label for="password">Password</label>
-          <input type="password" name = "password">
-          <button class="btn btn-outline-danger">Sign In</button>
-        </form>
-        <diV>
-        <form method = "POST" action = "/register">
-        <button class = "btn btn-outline-primary">Register</button>
-        </form>
-        </diV>
-        <% } else { %>
-       <p>Logged in as:</p> <%= user.email %>
-          <% } %>
-          <form method="POST" action="/logout"> 
-            <button class="btn btn-outline-danger">logout</button>
-          </form>
       </div>
     </div>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <% if(!user) { %>
+        <a class="nav-item nav-link" href="/login">Login</a>
+        <a class="nav-item nav-link" href="/register">Register</a>
+        <% } %>
+      </div>
+    </div>
+    <% if(user) { %>
+    <h5 style="margin-right: 15px;">Logged in as: <%= user.email %> </h5>
+    <form class="form-inline" action="/logout" method="POST">
+      <div class="form-group mb-2">
+        <button type="submit" class="btn btn-outline-dark">Logout</button>
+      </div>
+    </form>
+    <% } %>
   </nav>
 </header>

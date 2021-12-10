@@ -12,6 +12,7 @@
   <div class="card text-center">
       <div class="card-header"></div>
       <div class="card-body">
+        <%if(user) {%>
         <p><%= user.email%></p>
         <h5 class="card-title">TinyURL for: <%= longURL %></h5>
         <p class="card-text">Short URL: <a href="/u/<%= shortURL %>"><%= shortURL %></a></p>
@@ -23,7 +24,7 @@
       <button class="btn btn-primary" name="updateURL"   placeholder="http://">Submit</button>
     </form>
       </div>
-    
+    <% } %>
     <div class="card-footer text-muted"></div>
   </div>
   <!-- Bootstrap JS -->
