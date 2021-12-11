@@ -13,14 +13,14 @@
       <div class="card-header"></div>
       <div class="card-body">
         <%if(user) {%>
-        <p><%= user.email%></p>
+        <p><%   %></p>
         <h5 class="card-title">TinyURL for: <%= longURL %></h5>
         <p class="card-text">Short URL: <a href="/u/<%= shortURL %>"><%= shortURL %></a></p>
       </div>
       <div> 
-        <form method="POST" active="/urls">
+        <form method="POST" active="/u/<%= shortURL %>">
           <label for="updatedURL">New URL:</label>
-        <input name="update" name="updatedURL" type="text">
+        <input name="longURL" type="text" value = "<%= longURL %>">
       <button class="btn btn-primary" name="updateURL"   placeholder="http://">Submit</button>
     </form>
       </div>
