@@ -5,9 +5,9 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 ## Final Product
 
-!["screenshot description"](#)
+![/Users/dawnapple/lighthouse/w3/tinyapp/images/TinyApp1.png"](#)
 
-!["screenshot description"](#)
+!["/Users/dawnapple/lighthouse/w3/tinyapp/images/TinyApp2.png"](#)
 
 ## Dependencies
 
