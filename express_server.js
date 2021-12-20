@@ -65,7 +65,16 @@ const isUsersLink = (object, id) => {
   }
   return usersObject;
 }
-
+//////// GET POST///////////////
+/*** Redirects user to /urls if logged in, otherwise to /login ***/
+app.get('/', (req, resp) => {
+  const userID = req.session['user_id'];
+  if (userID) {
+    resp.redirect('/urls');
+  } else {
+    resp.redirect("/login");
+  }
+});
 /****************GENERATE A NEW URL*************/
 app.post('/urls', (req, res) => {
   const longURL = req.body.longURL;
