@@ -172,22 +172,17 @@ app.get("/login", (req, res) => {
 
 app.post("/login", (req, res) => {
   let user = getUserByEmail(req.body.email, usersDb);
-  if (!user || !bcrypt.compareSync(req.body.password, user.password)) {
-    res.status(403);
-    res.render("login", { error: "User not found" });
-    return;
+  if (!req.body.email || !req.body.password) {
+    return res.status(403).send(`Please enter valid username and password. <a href="/login">Go back to login.</a>`);
+
   }
+  if (!user || !bcrypt.compareSync(req.body.password, user.password)) {
+    return res.status(403).send(`Please enter valid username and password. <a href="/login">Go back to login.</a>`);
+  }
+
   req.session.user_id = user.id;
   res.redirect("/urls");
 });
-
-////logout////
-app.post("/logout", (req, res) => {
-
-  req.session = null;
-  res.redirect('/login');
-});
-
 
 /******  Private /url endpoints ********/
 app.get("/urls", (req, res) => {
