@@ -10,9 +10,13 @@
 </head>
 <body>
   <%- include('partials/_header') %>
-  
+
+  <% if(!user) {%>
+    <p>Please register</p>
+    <% } else { %>
   <main style="margin: 1em;">
     <h3>My URLs</h3>
+
     <table class="table">
       <thead>
         <tr>
@@ -26,20 +30,18 @@
         
         <% for(let url in urls) { %>
           <tr>
-            <td><%= url %></td>
-            <td><%= urls[url] %></td>
+            <td><a href="<%= urls[url]['longURL'] %>"><%= url %></a></td>
+            <td><a href="<%= urls[url]['longURL'] %>"><%= urls[url].longURL %></a></td>
+           
             <td>
-            <form method="POST" active="/urls/<%= url %>/update">
-             
-            <button class="btn btn-outline-primary" name="updatedURL">Edit</button>
-          </form>
+              <a class="btn btn-outline-primary" href="/urls/<%= url%>">Edit</a>
             </td>
             <td>
               <form method="POST" action="/urls/<%= url %>/delete">
               <button name= "delete" class="btn btn-outline-danger">Delete</button>
               </form>
               </td>
-            </td>
+              
           </tr>
         <% } %>
        
@@ -47,6 +49,7 @@
       
     </table>
   </main>
+  <% } %>
   <!-- Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
