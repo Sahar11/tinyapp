@@ -232,10 +232,11 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 
 //*******GET Edit PAGE****** */
 app.get("/urls/:shortURL", (req, res) => {
-
+ const userID =req.session['user_id'];
   const shortURL = req.params.shortURL;
   const longURL = req.body.longURL;
-  if (req.session['user_id']) {
+  const checkURL =isUsersLink(longURL, userID);
+  if (userID && checkURL) {
     const userId = req.session['user_id'];
     const user_id = req.params.id;
 
