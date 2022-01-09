@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const { name } = require("ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
-const { generateRandomString, getUserByEmail, cookieHasUser } = require("./helpers");
+const { generateRandomString, getUserByEmail } = require("./helpers");
 
 const PORT = 8080; // default port 8080
 
@@ -232,10 +232,10 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 
 //*******GET Edit PAGE****** */
 app.get("/urls/:shortURL", (req, res) => {
- const currUserId =req.session['user_id'];
+  const currUserId = req.session['user_id'];
   const shortURL = req.params.shortURL;
   const longURL = req.body.longURL;
-  const checkURL =isUsersLink(longURL, currUserId);
+  const checkURL = isUsersLink(longURL, currUserId);
   if (currUserId && checkURL) {
     const templateVars = {
       shortURL,
@@ -249,35 +249,6 @@ app.get("/urls/:shortURL", (req, res) => {
     res.redirect('/urls');
   }
 });
-/**
- * Logged in users can also traverse directly to a specific url by typing the shortURL in the address bar. This will take the user to the show url page where he / she can edit the longURL of the entry. User cannot access any other users shortURLs.
- */
- app.get("/urls/:shortURL", (req, res) => {
-  const currUserId = req.session.userId;
-  const shortURL = req.params.shortURL;
-  if (!currUserId) {
-    res.redirect("/urls");
-  } else if (urlDatabase[shortURL]) {
-    const templateVars = {
-      shortURL,
-      longURL: urlDatabase[shortURL]['longURL'],
-      userId: currUserId,
-      urlUserId: urlDatabase[shortURL]['userID'],
-      email: usersDb[currUserId]['email'],
-    };
-    res.render("urls_show", templateVars);
-  } else {
-    const errorMessage = {
-      userId: currUserId,
-      email: users[currUserId]['email'],
-      statusCode: 404,
-      errorMsg: "Resource not found...Please check your input!"
-    };
-    res.status(404).render("error-page", errorMessage);
-  }
-});
-
-
 //*******Edit URL****** */
 app.post("/urls/:shortURL", (req, res) => {
   const shortURL = req.params.shortURL;
