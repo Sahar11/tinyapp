@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const { name } = require("ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
-const { generateRandomString, getUserByEmail } = require("./helpers");
+const { generateRandomString, getUserByEmail, cookieHasUser } = require("./helpers");
 
 const PORT = 8080; // default port 8080
 
@@ -174,7 +174,6 @@ app.post("/login", (req, res) => {
   let user = getUserByEmail(req.body.email, usersDb);
   if (!req.body.email || !req.body.password) {
     return res.status(403).send(`Please enter valid username and password. <a href="/login">Go back to login.</a>`);
-
   }
   if (!user || !bcrypt.compareSync(req.body.password, user.password)) {
     return res.status(403).send(`Please enter valid username and password. <a href="/login">Go back to login.</a>`);
@@ -184,15 +183,12 @@ app.post("/login", (req, res) => {
   res.redirect("/urls");
 });
 
-
-
 ////logout////
 app.post("/logout", (req, res) => {
 
   req.session = null;
   res.redirect('/login');
 });
-
 
 /******  Private /url endpoints ********/
 app.get("/urls", (req, res) => {
@@ -262,6 +258,8 @@ app.post("/urls/:shortURL", (req, res) => {
     return res.status(401).send("You do not have access to edit this URL. ");
   }
 });
+
+
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);

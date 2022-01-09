@@ -17,5 +17,13 @@ const getUserByEmail = function (email, db) {
   }
   return null;
 };
+/* Checks if current cookie corresponds with a user in the userDatabase */
+const cookieHasUser = function(cookie, userDatabase) {
+  for (const user in userDatabase) {
+    if (cookie === user) {
+      return true;
+    }
+  } return false;
+};
 
-module.exports = { generateRandomString, getUserByEmail };
+module.exports = { generateRandomString, getUserByEmail, cookieHasUser };
