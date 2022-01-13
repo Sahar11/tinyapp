@@ -10,7 +10,6 @@ const { generateRandomString, getUserByEmail } = require("./helpers");
 
 const PORT = 8080; // default port 8080
 
-
 app.set("view engine", "ejs");
 
 app.use(cookieSession({
@@ -119,7 +118,10 @@ app.get('/u/:shortURL', (req, res) => {
 
 // Displaying Registration page//
 app.get('/register', (req, res) => {
-
+  const currUserId = req.session['user_id'];
+  if (currUserId) {
+    res.redirect("/urls");
+  }
   const templateVars = { user: null }
   res.render('register', templateVars);
 });
@@ -150,7 +152,7 @@ app.post('/register', (req, res) => {
   }
   usersDb[userId] = newUser;
   req.session.user_id = userId;
-  console.log(newUser);
+  //console.log(newUser);
   res.redirect('/urls');
 });
 /////////////Register Ends///////////////
@@ -162,10 +164,14 @@ app.get("/urls.json", (req, res) => {
 
 //////////////login get//////////////
 app.get("/login", (req, res) => {
-  const templateVars = {
-    user: null,
-  };
-  res.render("login", templateVars);
+  const currUserId = req.session['user_id'];
+  if (!currUserId) {
+    const templateVars = {
+      user: currUserId,
+    };
+    res.render("login", templateVars);
+  }
+  res.redirect('/urls');
 });
 
 ///////////login post/////////
@@ -178,7 +184,6 @@ app.post("/login", (req, res) => {
   if (!user || !bcrypt.compareSync(req.body.password, user.password)) {
     return res.status(403).send(`Please enter valid username and password. <a href="/login">Go back to login.</a>`);
   }
-
   req.session.user_id = user.id;
   res.redirect("/urls");
 });
@@ -195,26 +200,9 @@ app.get("/urls", (req, res) => {
 
   const id = req.session.user_id;
   const user = usersDb[id];
-  if (!user) {
-    //return res.status(401).send("You must <a href='/login'>login</a> first. ");
-    res.redirect("/login");
-  }
   const urls = urlsForUserId(id);
   const templateVars = { urls, user };
   return res.render("urls_index", templateVars);
-});
-
-app.get("/urls", (req, res) => {
-
-  const user_id = req.session.user_id;
-  const userID = usersDb[user_id];
-  if (!user_id || !user) {
-    res.redirect("/login");
-  }
-  const shortURL = req.params.shortURL;
-  const url = urlDatabase[shortURL];
-  const templateVars = { shortURL, url, userID };
-  res.render("urls_show", templateVars);
 });
 
 /*******Delete****** */
@@ -235,6 +223,7 @@ app.get("/urls/:shortURL", (req, res) => {
   const currUserId = req.session['user_id'];
   const shortURL = req.params.shortURL;
   const longURL = req.body.longURL;
+
   const checkURL = isUsersLink(longURL, currUserId);
   if (currUserId && checkURL) {
     const templateVars = {
